@@ -45,11 +45,16 @@ void    *ft_malloc(size_t size);
 void    ft_free(void *ptr);
 void    *ft_realloc(void *ptr, size_t size);
 
+void    show_alloc_mem();
+
 t_type  get_page_type(size_t size);
 size_t  get_page_size(t_type type, size_t size);
 
 void    *get_first_fit_addr(t_page *page, size_t size);
 void    *fragment_page(t_page *page, t_alloc *alloc, size_t size);
 t_alloc *new_mmap_alloc(size_t size);
+
+t_page  *free_ptr(void *ptr);
+void    allocs_defragmentation(t_page *page);
 
 #endif
