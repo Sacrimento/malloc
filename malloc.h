@@ -18,24 +18,26 @@ typedef enum    e_type
 
 typedef enum    e_status
 {
-    ALLOCED,
-    FREED
+    FREE,
+    ALLOCATED
 }               t_status;
+
+typedef struct s_alloc
+{
+    size_t          size;
+    t_status        status;
+    void            *data_addr;
+    struct s_alloc  *next;
+}               t_alloc;
+
 
 typedef struct  s_page
 {
     t_type          type;
     size_t          size;
-    void            *addr;
+    t_alloc         *alloc;
     struct s_page   *next;
 }               t_page;
-
-typedef struct s_alloc
-{
-    size_t      size;
-    t_status    status;
-}               t_alloc;
-
 
 t_page  *g_page;
 
@@ -45,5 +47,9 @@ void    *ft_realloc(void *ptr, size_t size);
 
 t_type  get_page_type(size_t size);
 size_t  get_page_size(t_type type, size_t size);
+
+void    *get_first_fit_addr(t_page *page, size_t size);
+void    *fragment_page(t_page *page, t_alloc *alloc, size_t size);
+t_alloc *new_mmap_alloc(size_t size);
 
 #endif
