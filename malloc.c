@@ -8,12 +8,14 @@ int     main(int argc, char **argv)
     char    *aa;
 
     tt = (char*)ft_malloc(9000);
+    ft_free(tt);
     aa = (char*)malloc(1000);
     tt = (char*)ft_malloc(9000);
     tt = (char*)ft_malloc(9000);
     tt = (char*)ft_malloc(9000);
     tt = (char*)ft_malloc(9000);
     tt = (char*)ft_malloc(111119000);
+    ft_free(tt);
 
     ft_free(tt);
 
@@ -72,6 +74,9 @@ void    *ft_malloc(size_t size)
 {
     void    *ptr;
     
+    if (size == 0)
+        return (NULL);
+
     if (!(ptr = find_first_fit(size)) && !(ptr = alloc_new_page(size)))
         return ((void*)-1);
     

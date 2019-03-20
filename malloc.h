@@ -55,6 +55,10 @@ void    *fragment_page(t_page *page, t_alloc *alloc, size_t size);
 t_alloc *new_mmap_alloc(size_t size);
 
 t_page  *free_ptr(void *ptr);
-void    allocs_defragmentation(t_page *page);
+int     allocs_defragmentation(t_page *page);
+void    search_and_destroy(t_type type);
+
+int     count_pages(t_type type);
+int     count_allocs(t_alloc *alloc);
 
 #endif

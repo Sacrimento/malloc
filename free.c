@@ -8,7 +8,9 @@ void    ft_free(void *ptr)
         return ;
     if (!(page = free_ptr(ptr)))
         return ;
-    allocs_defragmentation(page);
+    if (!(allocs_defragmentation(page)))
+        return ;
+    search_and_destroy(page->type);
 }
 
 t_page  *free_ptr(void *ptr)
@@ -37,9 +39,41 @@ t_page  *free_ptr(void *ptr)
     return (NULL);
 }
 
-void    allocs_defragmentation(t_page *page)
+int     allocs_defragmentation(t_page *page)
 {
     t_alloc *curr;
+    t_alloc *tmp_next;
 
     curr = page->alloc;
+    while (curr)
+    {
+        if (curr->status == FREE && curr->next && curr->next->status == FREE)
+        {
+            tmp_next = curr->next->next;
+            curr->size += curr->next->size;
+            if (munmap(curr->next, sizeof(t_alloc)) == -1)
+                return (0);
+            curr->next = tmp_next;
+        }
+        curr = curr->next;
+    }
+    return (1);
+}
+
+void    search_and_destroy(t_type type)
+{
+    t_page  *curr;
+    int     type_count;
+
+    curr = g_page;
+    type_count = count_pages(type);
+    while (curr->next)
+    {
+        if (curr->type == type && (type_count > 1 || type == LARGE) && count_allocs(curr->alloc) == 1 && curr->alloc->status == FREE)
+        {
+            printf("YES");
+            return ;
+        }
+        curr = curr->next;
+    }
 }
