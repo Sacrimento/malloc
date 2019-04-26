@@ -9,6 +9,14 @@
 
 #  include <stdio.h>
 
+/*
+    BONUSES :
+        -DEFRAGMENTATION :: DONE
+        -ALIGNEMENT DES ALLOCS DANS UNE PAGE POUR N'AVOIR QU'UNE SEULE ZONE FREE
+        -DUMP HEXA DES ZONES ALLOUEES
+        -CALLOC
+        -PRINT DE DEBUG ? 
+*/
 typedef enum    e_type
 {
     TINY,

@@ -2,22 +2,29 @@
 
 int     main(int argc, char **argv)
 {
-    struct rlimit rlim;
-
     char    *tt;
     char    *aa;
+    char    *ss;
+    char    *dd;
+    char    *ff;
+    char    *gg;
+    char    *hh;
+    char    *jj;
+    char    *kk;
+    char    *ll;
 
-    tt = (char*)ft_malloc(9000);
-    ft_free(tt);
-    aa = (char*)malloc(1000);
-    tt = (char*)ft_malloc(9000);
-    tt = (char*)ft_malloc(9000);
-    tt = (char*)ft_malloc(9000);
-    tt = (char*)ft_malloc(9000);
-    tt = (char*)ft_malloc(111119000);
-    ft_free(tt);
+    // for (int i = 0; i < 100; i++)
+    // {
+        tt = ft_malloc(1024);
+        aa = ft_malloc(1024);
+        ff = ft_malloc(1024);
+    // }
 
-    ft_free(tt);
+    show_alloc_mem();
+
+    ft_free(aa);
+
+    show_alloc_mem();
 
     return (0);
 }

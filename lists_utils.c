@@ -8,6 +8,7 @@ int     count_pages(t_type type)
     i = 0;
     if (type == LARGE)
         return (i);
+    curr = g_page;
     while (curr)
     {
         if (curr->type == type)
