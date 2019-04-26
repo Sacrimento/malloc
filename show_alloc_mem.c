@@ -32,7 +32,7 @@ unsigned long   show_pages(t_type type)
     t_page          *page;
     unsigned long   ttl;
 
-    page = g_page;
+    page = g_page[type];
     ttl = 0;
     if (type == TINY)
         ft_putstr("TINY : ");
@@ -57,7 +57,7 @@ void    show_alloc_mem()
     unsigned long   ttl;
 
     ttl = 0;
-    if (!(g_page))
+    if (!(g_page[0])) /////////////////
         ft_putstr("No allocations\n");
     else
     {

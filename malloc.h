@@ -11,14 +11,15 @@
 
 /*
     BONUSES :
-        -DEFRAGMENTATION
-        - ???? ALIGNEMENT DES ALLOCS DANS UNE PAGE POUR N'AVOIR QU'UNE SEULE ZONE FREE
-        - ???? DUMP HEXA DES ZONES ALLOUEES
+        -DEFRAGMENTATION++
         -CALLOC
         -ALIGNEMENT DES BYTES
         
         -MUTEX
 */
+
+#  define TINY_MAX 128
+#  define SMALL_MAX 1024
 
 typedef enum    e_type
 {
@@ -50,7 +51,7 @@ typedef struct  s_page
     struct s_page   *next;
 }               t_page;
 
-t_page  *g_page;
+t_page  *g_page[3];
 
 void    *ft_malloc(size_t size);
 void    ft_free(void *ptr);
@@ -60,6 +61,7 @@ void    show_alloc_mem();
 
 t_type  get_page_type(size_t size);
 size_t  get_page_size(t_type type, size_t size);
+int     is_page_removable(t_page *page);
 
 void    *get_first_fit_addr(t_page *page, size_t size);
 void    *fragment_page(t_page *page, t_alloc *alloc, size_t size);
@@ -68,11 +70,11 @@ t_alloc *new_mmap_alloc(size_t size);
 t_page  *free_ptr(void *ptr);
 int     allocs_defragmentation(t_page *page);
 void    align_allocations(t_page *page);
-void    remove_empty_page(t_type type);
+void    remove_empty_page(t_page *page);
 
-int     count_pages(t_type type);
 int     count_allocs(t_alloc *alloc);
 
 void    debug_allocs(t_page *page);
+void    debug_pages(void);
 
 #endif

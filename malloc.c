@@ -13,15 +13,17 @@ int     main(int argc, char **argv)
     char    *kk;
     char    *ll;
 
-    // for (int i = 0; i < 100; i++)
-    // {
+    for (int i = 0; i < 102; i++)
+    {
         tt = ft_malloc(1024);
-        aa = ft_malloc(1024);
-        ff = ft_malloc(1024);
-    // }
+        // ft_free(tt);
+        // aa = ft_malloc(1024);
+        // ff = ft_malloc(1024);
+    }
 
-    ft_free(aa);
-    ft_free(ff);
+    // ft_free(aa);
+    // ft_free(ff);
+    ft_free(tt);
 
     return (0);
 }
@@ -33,10 +35,10 @@ void    *find_first_fit(size_t size)
     void    *ptr;
 
     ptr = NULL;
-    if (!(g_page))
-        return (NULL);
-    curr = g_page;
     type = get_page_type(size);
+    if (!(g_page[type]))
+        return (NULL);
+    curr = g_page[type];
 
     while (curr)
     {
@@ -61,11 +63,11 @@ void    *alloc_new_page(size_t size)
         return (NULL);
     page->next = NULL;
 
-    if (!(g_page))
-        g_page = page;
+    if (!(g_page[page->type]))
+        g_page[page->type] = page;
     else
     {
-        curr = g_page;
+        curr = g_page[page->type];
         while (curr->next)
             curr = curr->next;
         curr->next = page;
@@ -84,6 +86,6 @@ void    *ft_malloc(size_t size)
     if (!(ptr = find_first_fit(size)) && !(ptr = alloc_new_page(size)))
         return ((void*)-1);
     
-    printf("Malloc returned : %p\n", ptr);
+    // printf("Malloc returned : %p\n", ptr);
     return (ptr);
 }

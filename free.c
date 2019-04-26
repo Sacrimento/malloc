@@ -8,14 +8,15 @@ void    ft_free(void *ptr)
         return ;
     if (!(page = free_ptr(ptr)))
         return ;
-    debug_allocs(page);
+    // debug_allocs(page);
     align_allocations(page); // MOVES FREED BLOCKS TO THE LEFT
-    debug_allocs(page);
+    // debug_allocs(page);
     if (!(allocs_defragmentation(page))) //MERGES FREED ALLOCS
         return ;
-    debug_allocs(page);
-    // search_and_destroy(page->type); // TO REWORK
-    remove_empty_page(page->type);
+    // debug_allocs(page);
+    debug_pages();
+    remove_empty_page(page);
+    debug_pages();
 }
 
 void    align_allocations(t_page *page)
@@ -41,24 +42,29 @@ t_page  *free_ptr(void *ptr)
 {
     t_page  *curr_page;
     t_alloc *curr_alloc;
+    int     i;
 
-    if (!(g_page))
-        return (NULL);
-    curr_page = g_page;
-    while (curr_page)
+    // if (!(g_page))
+    //     return (NULL);
+    i = -1;
+    while (++i < 3)
     {
-        curr_alloc = curr_page->alloc;
-        while (curr_alloc)
+        curr_page = g_page[i];
+        while (curr_page)
         {
-            if (curr_alloc->data_addr == ptr)
+            curr_alloc = curr_page->alloc;
+            while (curr_alloc)
             {
-                curr_alloc->status = FREE;
-                printf("%p was freed\n", ptr);
-                return curr_page;
+                if (curr_alloc->data_addr == ptr)
+                {
+                    curr_alloc->status = FREE;
+                    // printf("%p was freed\n", ptr);
+                    return curr_page;
+                }
+                curr_alloc = curr_alloc->next;
             }
-            curr_alloc = curr_alloc->next;
+            curr_page = curr_page->next;
         }
-        curr_page = curr_page->next;
     }
     return (NULL);
 }
@@ -113,11 +119,18 @@ void    remove_empty_page(t_page *page)
 {
     t_page  *curr;
 
-    curr = g_page;
-    if (count_pages(page->type) == 1)
+    if (count_allocs(page->alloc) > 1 || !is_page_removable(page))
         return ;
-    while (curr->next)
+    if (page == g_page[page->type])
+        g_page[page->type] = page->next;
+    curr = g_page[page->type];
+    while (curr && curr->next)
     {
-        ;
+        if (curr->next == page)
+            curr->next = curr->next->next;
+        curr = curr->next;
     }
+    // munmap(curr->alloc->data_addr, curr->alloc->size);
+    munmap(page->alloc, sizeof(t_alloc));
+    munmap(page, sizeof(t_page));
 }
