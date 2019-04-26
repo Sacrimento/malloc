@@ -1,7 +1,5 @@
 #include "malloc.h"
 
-void    align_allocations(t_page *page);
-
 void    ft_free(void *ptr)
 {
     t_page  *page;
@@ -10,32 +8,30 @@ void    ft_free(void *ptr)
         return ;
     if (!(page = free_ptr(ptr)))
         return ;
-    align_allocations(page);
-    if (!(allocs_defragmentation(page))) // TO IMPROVE BY MOVING THE DATA LEFT IN MIDDLE IF EXISTS
+    debug_allocs(page);
+    align_allocations(page); // MOVES FREED BLOCKS TO THE LEFT
+    debug_allocs(page);
+    if (!(allocs_defragmentation(page))) //MERGES FREED ALLOCS
         return ;
+    debug_allocs(page);
     // search_and_destroy(page->type); // TO REWORK
+    remove_empty_page(page->type);
 }
 
 void    align_allocations(t_page *page)
 {
     t_alloc *curr;
-    t_alloc *tmp;
-
+    t_alloc *cnext;
+    
     curr = page->alloc;
-    if (count_allocs(curr) == 1)
-        return;
-    if (curr->status == FREE)
+    while (curr)
     {
-        page->alloc = curr->next;
-        page->alloc->next = curr;
-    }
-    while (curr->next)
-    {
-        if (curr->next->status == FREE && curr->next->next)
+        cnext = curr->next;
+        if (cnext != page->alloc && cnext->status == FREE)
         {
-            tmp = curr->next;
-            curr->next = curr->next->next;
-            curr->next->next = tmp;
+            curr->next = cnext->next;
+            cnext->next = page->alloc;
+            page->alloc = cnext;
         }
         curr = curr->next;
     }
@@ -88,26 +84,40 @@ int     allocs_defragmentation(t_page *page)
     return (1);
 }
 
-void    search_and_destroy(t_type type) // TO TEST
+// void    search_and_destroy(t_type type) // TO TEST
+// {
+//     t_page  *curr;
+//     t_page  *tmp_next;
+//     int     type_count;
+
+//     curr = g_page;
+//     type_count = count_pages(type);
+//     while (curr->next)
+//     {
+//         if (curr->next->type == type && (type_count > 1 || type == LARGE) && count_allocs(curr->next->alloc) == 1 && curr->next->alloc->status == FREE)
+//         {
+//             tmp_next = curr->next->next;
+//             if ((munmap(curr->next->alloc->data_addr, curr->next->alloc->size) == -1)
+//                 || (munmap(curr->next->alloc, sizeof(t_alloc)) == -1)
+//                 || (munmap(curr->next, sizeof(t_page)) == -1))
+//                 return; // TODO DO SMTH
+//             curr->next = tmp_next;
+//             printf("freed one page\n");
+//             return ;
+//         }
+//         curr = curr->next;
+//     }
+// }
+
+void    remove_empty_page(t_page *page)
 {
     t_page  *curr;
-    t_page  *tmp_next;
-    int     type_count;
 
     curr = g_page;
-    type_count = count_pages(type);
+    if (count_pages(page->type) == 1)
+        return ;
     while (curr->next)
     {
-        if (curr->next->type == type && (type_count > 1 || type == LARGE) && count_allocs(curr->next->alloc) == 1 && curr->next->alloc->status == FREE)
-        {
-            tmp_next = curr->next->next;
-            munmap(curr->next->alloc->data_addr, curr->next->alloc->size) == -1;
-            munmap(curr->next->alloc, sizeof(t_alloc)) == -1;
-            munmap(curr->next, sizeof(t_page)) == -1;
-            curr->next = tmp_next;
-            printf("freed one page\n");
-            return ;
-        }
-        curr = curr->next;
+        ;
     }
 }

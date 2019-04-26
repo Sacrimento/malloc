@@ -11,12 +11,15 @@
 
 /*
     BONUSES :
-        -DEFRAGMENTATION :: DONE
-        -ALIGNEMENT DES ALLOCS DANS UNE PAGE POUR N'AVOIR QU'UNE SEULE ZONE FREE
-        -DUMP HEXA DES ZONES ALLOUEES
+        -DEFRAGMENTATION
+        - ???? ALIGNEMENT DES ALLOCS DANS UNE PAGE POUR N'AVOIR QU'UNE SEULE ZONE FREE
+        - ???? DUMP HEXA DES ZONES ALLOUEES
         -CALLOC
-        -PRINT DE DEBUG ? 
+        -ALIGNEMENT DES BYTES
+        
+        -MUTEX
 */
+
 typedef enum    e_type
 {
     TINY,
@@ -64,9 +67,12 @@ t_alloc *new_mmap_alloc(size_t size);
 
 t_page  *free_ptr(void *ptr);
 int     allocs_defragmentation(t_page *page);
-void    search_and_destroy(t_type type);
+void    align_allocations(t_page *page);
+void    remove_empty_page(t_type type);
 
 int     count_pages(t_type type);
 int     count_allocs(t_alloc *alloc);
+
+void    debug_allocs(t_page *page);
 
 #endif

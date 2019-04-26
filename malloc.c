@@ -20,11 +20,8 @@ int     main(int argc, char **argv)
         ff = ft_malloc(1024);
     // }
 
-    show_alloc_mem();
-
     ft_free(aa);
-
-    show_alloc_mem();
+    ft_free(ff);
 
     return (0);
 }
