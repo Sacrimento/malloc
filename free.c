@@ -81,6 +81,7 @@ int     allocs_defragmentation(t_page *page)
         {
             tmp_next = curr->next->next;
             curr->size += curr->next->size;
+            curr->data_addr = curr->data_addr > curr->next->data_addr ? curr->next->data_addr : curr->data_addr;
             if (munmap(curr->next, sizeof(t_alloc)) == -1)
                 return (0);
             curr->next = tmp_next;
@@ -130,7 +131,7 @@ void    remove_empty_page(t_page *page)
             curr->next = curr->next->next;
         curr = curr->next;
     }
-    // munmap(curr->alloc->data_addr, curr->alloc->size);
+    munmap(curr->alloc->data_addr, curr->alloc->size);
     munmap(page->alloc, sizeof(t_alloc));
     munmap(page, sizeof(t_page));
 }
