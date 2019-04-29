@@ -8,15 +8,15 @@ void    ft_free(void *ptr)
         return ;
     if (!(page = free_ptr(ptr)))
         return ;
-    // debug_allocs(page);
+    debug_allocs(page);
     align_allocations(page); // MOVES FREED BLOCKS TO THE LEFT
-    // debug_allocs(page);
+    debug_allocs(page);
     if (!(allocs_defragmentation(page))) //MERGES FREED ALLOCS
         return ;
-    // debug_allocs(page);
-    debug_pages();
-    remove_empty_page(page);
-    debug_pages();
+    debug_allocs(page);
+    // debug_pages();
+    // remove_empty_page(page);
+    // debug_pages();
 }
 
 void    align_allocations(t_page *page)
@@ -28,7 +28,7 @@ void    align_allocations(t_page *page)
     while (curr)
     {
         cnext = curr->next;
-        if (cnext != page->alloc && cnext->status == FREE)
+        if (cnext && cnext != page->alloc && cnext->status == FREE)
         {
             curr->next = cnext->next;
             cnext->next = page->alloc;
@@ -44,8 +44,6 @@ t_page  *free_ptr(void *ptr)
     t_alloc *curr_alloc;
     int     i;
 
-    // if (!(g_page))
-    //     return (NULL);
     i = -1;
     while (++i < 3)
     {
@@ -58,7 +56,7 @@ t_page  *free_ptr(void *ptr)
                 if (curr_alloc->data_addr == ptr)
                 {
                     curr_alloc->status = FREE;
-                    // printf("%p was freed\n", ptr);
+                    printf("%p was freed\n", ptr);
                     return curr_page;
                 }
                 curr_alloc = curr_alloc->next;

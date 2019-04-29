@@ -13,16 +13,21 @@ int     main(int argc, char **argv)
     char    *kk;
     char    *ll;
 
-    for (int i = 0; i < 102; i++)
-    {
-        tt = ft_malloc(1024);
-        // ft_free(tt);
-        // aa = ft_malloc(1024);
-        // ff = ft_malloc(1024);
-    }
+    // for (int i = 0; i < 129; i++)
+    // {
+    //     tt = ft_malloc(1023);
+    //     // ft_free(tt);
+    //     // aa = ft_malloc(1024);
+    //     // ff = ft_malloc(1024);
+    // }
+
+    aa = ft_malloc(1023);
+    tt = ft_malloc(1023);
+    dd = ft_malloc(1023);
+    ff = ft_malloc(1023);
 
     // ft_free(aa);
-    // ft_free(ff);
+    ft_free(aa);
     ft_free(tt);
 
     return (0);
