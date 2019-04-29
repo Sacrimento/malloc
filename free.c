@@ -28,13 +28,14 @@ void    align_allocations(t_page *page)
     while (curr)
     {
         cnext = curr->next;
-        if (cnext && cnext != page->alloc && cnext->status == FREE)
+        if (cnext && cnext->status == FREE)
         {
             curr->next = cnext->next;
             cnext->next = page->alloc;
             page->alloc = cnext;
         }
-        curr = curr->next;
+        else
+            curr = curr->next;
     }
 }
 
