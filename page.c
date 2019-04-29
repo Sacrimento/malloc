@@ -52,5 +52,6 @@ int     is_page_removable(t_page *page)
         }
         curr = curr->next;
     }
+    printf("PAGE REMOVABLE !!\n");
     return (0);
 }

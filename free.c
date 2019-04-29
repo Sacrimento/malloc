@@ -8,15 +8,15 @@ void    ft_free(void *ptr)
         return ;
     if (!(page = free_ptr(ptr)))
         return ;
-    debug_allocs(page);
+    // debug_allocs(page);
     align_allocations(page); // MOVES FREED BLOCKS TO THE LEFT
-    debug_allocs(page);
+    // debug_allocs(page);
     if (!(allocs_defragmentation(page))) //MERGES FREED ALLOCS
         return ;
-    debug_allocs(page);
-    // debug_pages();
-    // remove_empty_page(page);
-    // debug_pages();
+    // debug_allocs(page);
+    debug_pages();
+    remove_empty_page(page);
+    debug_pages();
 }
 
 void    align_allocations(t_page *page)
@@ -81,8 +81,7 @@ int     allocs_defragmentation(t_page *page)
             tmp_next = curr->next->next;
             curr->size += curr->next->size;
             curr->data_addr = curr->data_addr > curr->next->data_addr ? curr->next->data_addr : curr->data_addr;
-            if (munmap(curr->next, sizeof(t_alloc)) == -1)
-                return (0);
+            munmap(curr->next, sizeof(t_alloc));
             curr->next = tmp_next;
         }
         curr = curr->next;
