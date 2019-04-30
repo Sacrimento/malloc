@@ -6,9 +6,9 @@ t_type  get_page_type(size_t size)
 
     page_size = (size_t)getpagesize();
 
-    if (size < TINY_MAX)
+    if (size <= TINY_MAX)
         return (TINY);
-    else if (size < SMALL_MAX)
+    else if (size <= SMALL_MAX)
         return (SMALL);
     else
         return (LARGE);
@@ -39,19 +39,20 @@ int     is_page_removable(t_page *page)
     t_page  *curr;
     size_t  page_size;
 
-    page_size = (size_t)getpagesize();
     if (page->type == LARGE)
         return (1);
+    page_size = (size_t)getpagesize();
     curr = g_page[page->type];
     while (curr)
     {
         if (curr != page && curr->type == page->type)
         {
-            if (curr->alloc->status == FREE && curr->alloc->size > page->type == TINY ? TINY_MAX : SMALL_MAX)
+            // printf("Hello there\n");
+            if (curr->alloc->status == FREE && curr->alloc->size >= (page->type == TINY ? TINY_MAX : SMALL_MAX))
                 return (1);
         }
         curr = curr->next;
     }
-    printf("PAGE REMOVABLE !!\n");
+    // printf("PAGE NOT REMOVABLE !!\n");
     return (0);
 }

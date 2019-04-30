@@ -1,6 +1,6 @@
 #include "malloc.h"
 
-void    ft_free(void *ptr)
+void    free(void *ptr)
 {
     t_page  *page;
 
@@ -14,9 +14,9 @@ void    ft_free(void *ptr)
     if (!(allocs_defragmentation(page))) //MERGES FREED ALLOCS
         return ;
     // debug_allocs(page);
-    debug_pages();
+    // debug_pages();
     remove_empty_page(page);
-    debug_pages();
+    // debug_pages();
 }
 
 void    align_allocations(t_page *page)
@@ -57,7 +57,7 @@ t_page  *free_ptr(void *ptr)
                 if (curr_alloc->data_addr == ptr)
                 {
                     curr_alloc->status = FREE;
-                    printf("%p was freed\n", ptr);
+                    // printf("%p was freed\n", ptr);
                     return curr_page;
                 }
                 curr_alloc = curr_alloc->next;
@@ -89,31 +89,6 @@ int     allocs_defragmentation(t_page *page)
     return (1);
 }
 
-// void    search_and_destroy(t_type type) // TO TEST
-// {
-//     t_page  *curr;
-//     t_page  *tmp_next;
-//     int     type_count;
-
-//     curr = g_page;
-//     type_count = count_pages(type);
-//     while (curr->next)
-//     {
-//         if (curr->next->type == type && (type_count > 1 || type == LARGE) && count_allocs(curr->next->alloc) == 1 && curr->next->alloc->status == FREE)
-//         {
-//             tmp_next = curr->next->next;
-//             if ((munmap(curr->next->alloc->data_addr, curr->next->alloc->size) == -1)
-//                 || (munmap(curr->next->alloc, sizeof(t_alloc)) == -1)
-//                 || (munmap(curr->next, sizeof(t_page)) == -1))
-//                 return; // TODO DO SMTH
-//             curr->next = tmp_next;
-//             printf("freed one page\n");
-//             return ;
-//         }
-//         curr = curr->next;
-//     }
-// }
-
 void    remove_empty_page(t_page *page)
 {
     t_page  *curr;
@@ -121,12 +96,19 @@ void    remove_empty_page(t_page *page)
     if (count_allocs(page->alloc) > 1 || !is_page_removable(page))
         return ;
     if (page == g_page[page->type])
+    {
         g_page[page->type] = page->next;
+        printf("DID ANOTHER GREAT THING\n");
+    }
     curr = g_page[page->type];
     while (curr && curr->next)
     {
         if (curr->next == page)
+        {
+            printf("DID SOMETHING GREAT !\n");
             curr->next = curr->next->next;
+            break;
+        }
         curr = curr->next;
     }
     munmap(curr->alloc->data_addr, curr->alloc->size);
