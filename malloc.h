@@ -55,7 +55,7 @@ t_page  *g_page[3];
 
 void    *malloc(size_t size);
 void    free(void *ptr);
-void    *ft_realloc(void *ptr, size_t size);
+void    *realloc(void *ptr, size_t size);
 
 void    show_alloc_mem();
 
@@ -66,9 +66,10 @@ int     is_page_removable(t_page *page);
 void    *get_first_fit_addr(t_page *page, size_t size);
 void    *fragment_page(t_page *page, t_alloc *alloc, size_t size);
 t_alloc *new_mmap_alloc(size_t size);
+t_alloc *new_alloc(size_t size, void *addr, t_alloc *next);
 
 t_page  *free_ptr(void *ptr);
-int     allocs_defragmentation(t_page *page);
+void    allocs_defragmentation(t_page *page);
 void    align_allocations(t_page *page);
 void    remove_empty_page(t_page *page);
 
@@ -76,5 +77,7 @@ int     count_allocs(t_alloc *alloc);
 
 void    debug_allocs(t_page *page);
 void    debug_pages(void);
+
+void	ft_putstr(char const *s);
 
 #endif

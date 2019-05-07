@@ -47,12 +47,12 @@ int     is_page_removable(t_page *page)
     {
         if (curr != page && curr->type == page->type)
         {
-            // printf("Hello there\n");
+            // ft_putstr("Hello there\n");
             if (curr->alloc->status == FREE && curr->alloc->size >= (page->type == TINY ? TINY_MAX : SMALL_MAX))
                 return (1);
         }
         curr = curr->next;
     }
-    // printf("PAGE NOT REMOVABLE !!\n");
+    // ft_putstr("PAGE NOT REMOVABLE !!\n");
     return (0);
 }

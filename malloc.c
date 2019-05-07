@@ -19,8 +19,8 @@
 //         //     tt = ft_malloc(1023);
 //         // else
 //         //     ff = ft_malloc(1023);
-//         aa = ft_malloc(1024);
-//         ft_free(aa);
+//         // aa = ft_malloc(1024);
+//         // ft_free(aa);
 //         // ff = ft_malloc(1024);
 //     }
 
@@ -29,12 +29,25 @@
 //     // dd = ft_malloc(1023);
 //     // ff = ft_malloc(1023);
 
-    
+//     ff = ft_malloc(16);
+//     ff = ft_realloc(ff, 11);
+
 //     // ft_free(ff);
 //     // ft_free(tt);
 
 //     return (0);
 // }
+
+int     ft_strlen(char const *s)
+{
+    return (*s ? 1 + ft_strlen(++s) : 0);
+}
+
+void	ft_putstr(char const *s)
+{
+	if (s)
+		write(1, s, ft_strlen(s));
+}
 
 void    *find_first_fit(size_t size)
 {
@@ -87,13 +100,14 @@ void    *alloc_new_page(size_t size)
 void    *malloc(size_t size)
 {
     void    *ptr;
-    
+    ft_putstr("malloc begin\n");
     if (size == 0)
         return (NULL);
 
     if (!(ptr = find_first_fit(size)) && !(ptr = alloc_new_page(size)))
         return ((void*)-1);
     
-    // printf("Malloc returned : %p\n", ptr);
+    // ft_putstr("Malloc returned : %p\n", ptr);
+    ft_putstr("malloc end\n");
     return (ptr);
 }
