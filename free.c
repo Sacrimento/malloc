@@ -4,6 +4,7 @@ void    free(void *ptr)
 {
     t_page  *page;
 
+ft_putstr("free ebegin\n");
     if (!(ptr))
         return ;
     if (!(page = free_ptr(ptr)))
@@ -11,18 +12,19 @@ void    free(void *ptr)
     // debug_allocs(page);
     align_allocations(page); // MOVES FREED BLOCKS TO THE LEFT
     // debug_allocs(page);
-    if (!(allocs_defragmentation(page))) //MERGES FREED ALLOCS
-        return ;
+    allocs_defragmentation(page); //MERGES FREED ALLOCS
     // debug_allocs(page);
     // debug_pages();
     remove_empty_page(page);
     // debug_pages();
+    ft_putstr("free end\n");
 }
 
 void    align_allocations(t_page *page)
 {
     t_alloc *curr;
     t_alloc *cnext;
+    
     
     curr = page->alloc;
     while (curr)
@@ -57,7 +59,7 @@ t_page  *free_ptr(void *ptr)
                 if (curr_alloc->data_addr == ptr)
                 {
                     curr_alloc->status = FREE;
-                    // printf("%p was freed\n", ptr);
+                    // ft_putstr("%p was freed\n", ptr);
                     return curr_page;
                 }
                 curr_alloc = curr_alloc->next;
@@ -68,7 +70,7 @@ t_page  *free_ptr(void *ptr)
     return (NULL);
 }
 
-int     allocs_defragmentation(t_page *page)
+void    allocs_defragmentation(t_page *page)
 {
     t_alloc *curr;
     t_alloc *tmp_next;
@@ -86,7 +88,6 @@ int     allocs_defragmentation(t_page *page)
         }
         curr = curr->next;
     }
-    return (1);
 }
 
 void    remove_empty_page(t_page *page)
@@ -98,14 +99,14 @@ void    remove_empty_page(t_page *page)
     if (page == g_page[page->type])
     {
         g_page[page->type] = page->next;
-        printf("DID ANOTHER GREAT THING\n");
+        ft_putstr("DID ANOTHER GREAT THING\n");
     }
     curr = g_page[page->type];
     while (curr && curr->next)
     {
         if (curr->next == page)
         {
-            printf("DID SOMETHING GREAT !\n");
+            ft_putstr("DID SOMETHING GREAT !\n");
             curr->next = curr->next->next;
             break;
         }

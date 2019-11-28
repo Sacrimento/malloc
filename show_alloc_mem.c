@@ -1,14 +1,14 @@
 #include "malloc.h"
 
-unsigned int    ft_strlen(char *str)
-{
-    return (*str ? 1 + ft_strlen(++str) : 0);
-}
+// unsigned int    ft_strlen(char *str)
+// {
+//     return (*str ? 1 + ft_strlen(++str) : 0);
+// }
 
-void    ft_putstr(char *str)
-{
-    write(1, str, ft_strlen(str));
-}
+// void    ft_putstr(char *str)
+// {
+//     write(1, str, ft_strlen(str));
+// }
 
 size_t  show_pages(t_type type)
 {
