@@ -53,7 +53,7 @@ typedef struct  s_page
 
 t_page  *g_page[3];
 
-void    *malloc(size_t size);
+void    *ft_malloc(size_t size);
 void    free(void *ptr);
 void    *ft_realloc(void *ptr, size_t size);
 

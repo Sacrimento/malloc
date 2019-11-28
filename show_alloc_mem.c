@@ -10,42 +10,27 @@ void    ft_putstr(char *str)
     write(1, str, ft_strlen(str));
 }
 
-unsigned long   show_allocs(t_alloc *alloc)
+size_t  show_pages(t_type type)
 {
-    unsigned long   ttl;
+    t_page  *page;
+    t_alloc *alloc;
+    size_t  ttl;
 
-    ttl = 0;
-    while (alloc)
-    {
-        if (alloc->status == ALLOCATED)
-        {
-            ttl += alloc->size;
-            printf("%p - %p : %lu octets\n", alloc->data_addr, alloc->data_addr + alloc->size, alloc->size);
-        }
-        alloc = alloc->next;
-    }
-    return (ttl);
-}
-
-unsigned long   show_pages(t_type type)
-{
-    t_page          *page;
-    unsigned long   ttl;
-
+    if (!g_page[type])
+        ft_putstr("\tNo allocation\n");
     page = g_page[type];
-    ttl = 0;
-    if (type == TINY)
-        ft_putstr("TINY : ");
-    else if (type == SMALL)
-        ft_putstr("SMALL : ");
-    else
-        ft_putstr("LARGE : ");
     while (page)
     {
-        if (page->type == type && !(count_allocs(page->alloc) == 1 && page->alloc->status == FREE))
+        printf("\t%p\n", page->alloc->data_addr);
+        alloc = page->alloc;
+        while (alloc)
         {
-            printf("%p\n", page);
-            ttl += show_allocs(page->alloc);
+            if (alloc->status == ALLOCATED)
+            {
+                printf("%p - %p : %lu octets\n", alloc->data_addr, alloc->data_addr + alloc->size, alloc->size);
+                ttl += alloc->size;
+            }
+            alloc = alloc->next;
         }
         page = page->next;
     }
@@ -54,18 +39,19 @@ unsigned long   show_pages(t_type type)
 
 void    show_alloc_mem()
 {
-    unsigned long   ttl;
+    size_t  ttl;
 
     ttl = 0;
-    if (!(g_page[0])) /////////////////
+    if (!g_page[TINY] && !g_page[SMALL] && !g_page[LARGE])
         ft_putstr("No allocations\n");
     else
     {
+        ft_putstr("TINY : \r");
         ttl += show_pages(TINY);
+        ft_putstr("SMALL : \r");
         ttl += show_pages(SMALL);
+        ft_putstr("LARGE : \r");
         ttl += show_pages(LARGE);
     }
-    ft_putstr("Total : ");
-    printf("%lu", ttl);
-    ft_putstr(" octets\n");
+    printf("Total : %lu octets\n", ttl);
 }
