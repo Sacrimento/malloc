@@ -1,28 +1,25 @@
 #include "malloc.h"
 
-// int     main(int argc, char **argv)
-// {
-//     char    *tt;
-//     char    *aa;
-//     char    *ss;
-//     char    *dd;
-//     char    *ff;
-//     char    *gg;
-//     char    *hh;
-//     char    *jj;
-//     char    *kk;
-//     char    *ll;
+int     main(int argc, char **argv)
+{
+    char    *tt;
+    char    *aa;
+    char    *ss;
+    char    *dd;
+    char    *ff;
+    char    *gg;
+    char    *hh;
+    char    *jj;
+    char    *kk;
+    char    *ll;
 
-//     for (int i = 0; i < 129; i++)
-//     {
-//         // if (i < 128)
-//         //     tt = ft_malloc(1023);
-//         // else
-//         //     ff = ft_malloc(1023);
-//         // aa = ft_malloc(1024);
-//         // ft_free(aa);
-//         // ff = ft_malloc(1024);
-//     }
+    for (int i = 0; i < 129; i++)
+    {
+        if (i < 128)
+            tt = ft_malloc(1024);
+        else
+            ff = ft_malloc(1024);
+    }
 
 //     // aa = ft_malloc(1023);
 //     // tt = ft_malloc(1023);
@@ -34,9 +31,10 @@
 
 //     // ft_free(ff);
 //     // ft_free(tt);
+    show_alloc_mem();
 
-//     return (0);
-// }
+    return (0);
+}
 
 int     ft_strlen(char const *s)
 {
@@ -97,7 +95,7 @@ void    *alloc_new_page(size_t size)
     return (find_first_fit(size));
 }
 
-void    *malloc(size_t size)
+void    *ft_malloc(size_t size)
 {
     void    *ptr;
     ft_putstr("malloc begin\n");
