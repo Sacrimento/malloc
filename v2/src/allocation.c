@@ -13,7 +13,7 @@ void    *first_fit(size_t size, t_page *priority_page)
         while (((t_header*)p)->size)
         {
             if (((t_header*)p)->free && ((t_header*)p)->size - sizeof(t_header) >= size)
-                return (get_page_type(size) == LARGE ? p + sizeof(t_header) : split_allocation(p, size));
+                return split_allocation(p, size);
             p += ((t_header*)p)->size;
         }
         curr_page = curr_page->next;
@@ -27,16 +27,19 @@ void    *split_allocation(void *alloc_ptr, size_t size)
     size_t  new_size;
     size_t  old_size;
 
-    new_size = align(sizeof(t_header) + size, ALIGNEMENT);
-    old_size = ((t_header*)alloc_ptr)->size;
-
-    ((t_header*)alloc_ptr)->size = new_size;
     ((t_header*)alloc_ptr)->free = 0;
+    if (get_page_size(size) != LARGE)
+    {
+        new_size = align(sizeof(t_header) + size, ALIGNEMENT);
+        old_size = ((t_header*)alloc_ptr)->size;
 
-    new_block = alloc_ptr + ((t_header*)alloc_ptr)->size;
-    ((t_header*)new_block)->prev_size = new_size;
-    ((t_header*)new_block)->size = old_size - new_size;
-    ((t_header*)new_block)->free = 1;
+        ((t_header*)alloc_ptr)->size = new_size;
+
+        new_block = alloc_ptr + ((t_header*)alloc_ptr)->size;
+        ((t_header*)new_block)->prev_size = new_size;
+        ((t_header*)new_block)->size = old_size - new_size;
+        ((t_header*)new_block)->free = 1;
+    }
 
     return (alloc_ptr + sizeof(t_header));
 }

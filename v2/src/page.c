@@ -23,7 +23,7 @@ void    *alloc_new_page(size_t size)
     (*(t_header*)page->alloc).size = page_size - sizeof(t_header);
     (*(t_header*)page->alloc).free = 1;
 
-    printf("%lu %lu\n", (*(t_header*)page->alloc).size, getpagesize());
+    printf("%lu %d\n", (*(t_header*)page->alloc).size, getpagesize());
 
     (*(t_header*)(page->alloc + (*(t_header*)page->alloc).size)).size = 0;
 
