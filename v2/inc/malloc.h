@@ -24,6 +24,7 @@ typedef enum    e_type
 
 typedef struct  s_page
 {
+    size_t          size;
     t_type          type;
     void            *alloc;
     struct s_page   *next;
@@ -43,7 +44,9 @@ void    *ft_malloc(size_t size);
 void    ft_free(void *ptr);
 void    *ft_realloc(void *ptr, size_t size);
 
+#include "page.h"
 #include "allocation.h"
+#include "show_alloc_mem.h"
 
 #include <stdio.h>
 

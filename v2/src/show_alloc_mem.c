@@ -6,8 +6,10 @@ void    show_alloc_mem()
     const char      *type[3] = {"TINY", "SMALL", "LARGE"};
     t_page          *curr_page;
     void            *alloc;
+    size_t          ttl;
 
     i = 0;
+    ttl = 0;
     while (i < 3)
     {
         printf("%s :", type[i]);
@@ -21,11 +23,15 @@ void    show_alloc_mem()
             while (((t_header*)alloc)->size != 0)
             {
                 if (!((t_header*)alloc)->free)
+                {
                     printf("%p - %p : %lu octets\n", alloc + sizeof(t_header), alloc + ((t_header*)alloc)->size, ((t_header*)alloc)->size - sizeof(t_header));
+                    ttl += ((t_header*)alloc)->size - sizeof(t_header);
+                }
                 alloc += ((t_header*)alloc)->size;
             }
             curr_page = curr_page->next;
         }
         i++;
     }
+    printf("Total : %lu octets\n", ttl);
 }

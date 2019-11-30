@@ -7,6 +7,8 @@ void    *first_fit(size_t size, t_page *priority_page)
     void    *p;
 
     curr_page = (priority_page ? priority_page : g_page[get_page_type(size)]);
+    if (!curr_page && get_page_type(size) == LARGE)
+        return alloc_new_page(size);
     while (curr_page)
     {
         p = curr_page->alloc;
